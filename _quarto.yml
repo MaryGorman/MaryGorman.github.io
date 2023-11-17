@@ -10,10 +10,11 @@ exclude: ["*.rds","*.tex","*.csl","*.bib","docs*","404.html","_old*","_freeze*"]
 
 website:
   title: "Mary Gorman"
+  repo-url: https://github.com/MaryGorman/MaryGorman.github.io/
+  site-url: https://marygorman.github.io/
   navbar:
     pinned: true
     left:
-      - index.qmd
       - text: Wing Family Tree
         file: WingTree.qmd
       - text: Games

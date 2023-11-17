@@ -3,7 +3,7 @@ title: "Misc Links"
 ---
 
 
-## Bird-related
+### Bird-related
 
 
 
@@ -17,3 +17,17 @@ title: "Misc Links"
 :::
 
 [All About Birds](https://merlin.allaboutbirds.org)
+
+
+### AI Chat
+
+[ChatGPT](https://chat.openai.com/)
+
+[Bard](https://bard.google.com/chat)
+
+[Claude](claude.ai)
+
+[Census GPT](https://censusgpt.com/)
+
+[Chatbot Arena](https://chat.lmsys.org/?arena)
+

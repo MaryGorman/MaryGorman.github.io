@@ -2,38 +2,46 @@
 title: "Game Links"
 ---
 
+### Word/Language Games
+- [Language Guesser](https://languageguesser.com)
+- [Semantris](https://research.google.com/semantris/)
+- [Semantle Original](https://semantle.com/)
+- [Semantle Junior](https://semantle.com/junior)
+- [Alphabattle](https://alphabattle.xyz)
 
-### Word Games
-[Language Guesser](https://languageguesser.com) \ 
-
+### Picture Games
+- [ChronoPhoto](https://www.chronophoto.app/web.html)
+- [TimeGuessr](https://timeguessr.com/)
 
 ### Color Games
-[Hue](https://hue-the-game.herokuapp.com)
+- [Hue](https://hue-the-game.herokuapp.com)
 
-
-### Music/auditory games
-
-[Toned Ear](https://tonedear.com/)
-[Rhythm Game](https://www.concerthotels.com/got-rhythm)
-[Flagle](https://ducc.pythonanywhere.com/flaggle/) \
-
+### Music/Auditory Games
+- [Toned Ear](https://tonedear.com/)
+- [Rhythm Game](https://www.concerthotels.com/got-rhythm)
+- [Flagle](https://ducc.pythonanywhere.com/flaggle/)
 
 ### Map Games
-
-[Geoguesser](https://www.geoguessr.com/seterra/en/vgp/3007) \
-
+- [Geoguessr](https://www.geoguessr.com/seterra/en/vgp/3007)
+- [JetPunk Country Quiz](https://www.jetpunk.com/quizzes/how-many-countries-can-you-name)
+- [Travle](https://imois.in/games/travle/)
+- [Travle USA](https://imois.in/games/travle/usa/)
+- [Virtual Vacation Guess](https://virtualvacation.us/guess)
+- [Globle](https://globle-game.com/)
+- [Worldle](https://worldle.teuteuf.fr/)
 
 ### Miscellaneous 
-
-[Concentrick](https://concentrick.app) \
-[Alphabattle](https://alphabattle.xyz) \
-\ \
-[Explorable](https://explorabl.es/all/) \
-
-[Ballot](https://ncase.me/ballot/) \
-
-[Science at Home](https://www.scienceathome.org/games) \
-
-
-[Perfect Circle](https://vole.wtf/perfect-circle/) \
-[Neatness](https://js13kgames.com/games/the-neatness/index.html)
+- [Concentrick](https://concentrick.app)
+- [Explorable](https://explorabl.es/all/)
+- [Ballot](https://ncase.me/ballot/)
+- [Science at Home](https://www.scienceathome.org/games)
+- [Perfect Circle](https://vole.wtf/perfect-circle/)
+- [Neatness](https://js13kgames.com/games/the-neatness/index.html)
+- [The Wikipedia Game](https://www.thewikipediagame.com/)
+- [Tradle](https://games.oec.world/en/tradle/)
+- [Listed](https://listed.fun/)
+- [Listed Chi](https://listed.fun/chi)
+- [NY Times Connections Game](https://www.nytimes.com/games/connections)
+- [Neal.fun](https://neal.fun/)
+- [Higher Lower Game](https://www.higherlowergame.com/)
+- [Fosiper](https://fosiper.com/games/)

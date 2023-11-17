@@ -1,4 +1,7 @@
 /.quarto/
+/.quarto/*
+.quarto/xref*
+
 _freeze/*
 .Rproj.user/*
 
