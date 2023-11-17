@@ -14,6 +14,7 @@ website:
   site-url: https://marygorman.github.io/
   navbar:
     pinned: true
+    search: true
     left:
       - text: Wing Family Tree
         file: WingTree.qmd
@@ -31,7 +32,8 @@ format:
       dark: Slate
     css: ["Style/style1.css"]
     toc: true
-    toc-location: left
+    toc-location: right
+    smooth-scroll: true
 
 execute:
   freeze: true  # never re-render during project render
