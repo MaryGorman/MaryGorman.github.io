@@ -1,0 +1,48 @@
+project:
+  type: website
+  render:
+    - "*.qmd"
+    - "!Manuscript/"
+
+exclude: ["*.rds","*.tex","*.csl","*.bib","docs*","404.html","_old*","out.bib",
+"*.pdf","*.R",".obsidian","Rproj","R","Bib","_site","exp","HTW_Analysis*","Motivated*","Manuscript*"]
+
+
+
+website:
+  title: "Mary Gorman"
+  navbar:
+    pinned: true
+    left:
+      - WingTree.qmd
+      - text: Wing Family Tree
+      
+
+format:
+  html:
+    theme:
+      light: Lumen
+      dark: Slate
+    css: ["Style/style1.css"]
+    toc: true
+    toc-location: left
+
+execute:
+  freeze: true  # never re-render during project render
+
+
+
+    
+      
+# format:
+#   html:
+#     theme:
+#       light: Style/embers.scss
+#       dark: darkly
+#     css: ["Style/style1.css"]
+#     toc: true
+#     toc-location: left
+#     bibliography: /Users/thomasgorman/.pandoc/My_Library.bib
+#     csl: Style/apa7_spacing.csl
+
+    

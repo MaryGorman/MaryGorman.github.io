@@ -1,0 +1,7 @@
+"0","joinC %>% select(Name,Birth_Year,Death_Year,Age,Birthplace,Death_Location,Group) %>% "
+"0","  DT::datatable(extensions=c('Buttons','ColReorder','AutoFill','Responsive'),"
+"0","                options=list(pageLength=20,dom = 'Bfrtip',colReorder=TRUE, buttons = c('copy', 'csv', 'excel', 'pdf', 'print')),"
+"0","    caption = htmltools::tags$caption("
+"0","    style = 'caption-side: top; text-align: left;',"
+"0","    'Table 2: ', htmltools::em('Click Column Headers to Sort. Drag to rearrange.') )"
+"0","  )"
