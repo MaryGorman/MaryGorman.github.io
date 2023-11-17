@@ -1,12 +1,11 @@
 project:
+  output-dir: docs
   type: website
   render:
     - "*.qmd"
     - "!Manuscript/"
 
-exclude: ["*.rds","*.tex","*.csl","*.bib","docs*","404.html","_old*","out.bib",
-"*.pdf","*.R",".obsidian","Rproj","R","Bib","_site","exp","HTW_Analysis*","Motivated*","Manuscript*"]
-
+exclude: ["*.rds","*.tex","*.csl","*.bib","docs*","404.html","_old*","_freeze*"]
 
 
 website:
