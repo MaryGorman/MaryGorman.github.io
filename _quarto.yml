@@ -13,6 +13,7 @@ website:
   navbar:
     pinned: true
     left:
+      - index.qmd
       - text: Wing Family Tree
         file: WingTree.qmd
       - text: Games
