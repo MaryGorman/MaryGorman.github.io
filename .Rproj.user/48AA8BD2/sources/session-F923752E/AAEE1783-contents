@@ -1,0 +1,723 @@
+---
+title: "Gantt"
+execute: 
+  warning: false
+  error: false
+---
+
+
+```{r}
+library(ggplot2); library(plotly); library(tidyverse)
+```
+
+
+
+https://plotly.com/r/gantt/
+
+
+https://www.statology.org/gantt-chart-r-ggplot2/
+```{r}
+
+
+#create data frame
+data <- data.frame(name = c('Bob', 'Greg', 'Mike', 'Andy'), 
+start = c(4, 7, 12, 16),
+end = c(12, 11, 8, 22),
+shift_type = c('early', 'mid_day', 'mid_day', 'late')
+)
+gantt <- ggplot(data, aes(x=start, xend=end, y=name, yend=name, color=shift_type)) +
+  theme_bw()+ #use ggplot theme with black gridlines and white background
+  geom_segment(linewidth=8) + #increase line width of segments in the chart
+  labs(title='Worker Schedule', x='Time', y='Worker Name')
+
+ggplotly(gantt)
+```
+
+
+https://jtr13.github.io/cc19/gantt-charts.html
+```{r}
+
+df <- data.frame(task=c("Explore Ideas", "Finalize Idea", "Make Plots with\n geom_line", "Make Plots with\n Plan Package", "Add Writeups", "Refine Plots", "Review Tutorial", "Submit Tutorial", "Get Feedback\n and Update"), 
+                 start=c("2019-10-15", "2019-10-18", "2019-10-19", "2019-10-22", "2019-10-24", "2019-10-25", "2019-10-26", "2019-10-27", "2019-10-28"),
+                 end=c("2019-10-18", "2019-10-19", "2019-10-24", "2019-10-26", "2019-10-27", "2019-10-27", "2019-10-28", "2019-10-28", "2019-10-31"), 
+                 owner=c("Harish", "Phani", "Harish", "Phani", "Phani", "Harish", "Phani", "Harish", "Phani"))
+df <- df %>% 
+  mutate(start = as.Date(start), end = as.Date(end))
+df_tidy <- df %>% 
+  gather(key=date_type, value=date, -task, -owner)
+
+
+df_completed <- df %>% 
+  mutate(completed = factor(c(rep(1, 6), rep(0, 3))))
+
+df_tidy <- df_completed %>% 
+  gather(key=date_type, value=date, -task, -owner, -completed)
+
+
+gantt2<- ggplot() +
+  geom_line(data=df_tidy, mapping=aes(x=fct_rev(fct_inorder(task)), y=date, color=owner, alpha=completed), size=10) +
+  geom_hline(yintercept=as.Date("2019-10-27"), colour="black", linetype="dashed") +
+  coord_flip() +
+  scale_alpha_discrete(range=c(1, 0.2), guide="none") +
+  scale_y_date(date_breaks = "1 day") +
+  labs(title="Community Contribution Gantt Chart",
+       x = "Task",
+       y = "Date",
+       colour = "Owner") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90),
+        panel.grid.minor = element_line(colour="white", size=0.5),
+        legend.position="right",
+        plot.title = element_text(hjust = 0.5))
+
+
+ggplotly(gantt2)
+
+```
+
+https://rpubs.com/techanswers88/gantt-chart-in-r
+
+
+```{r}
+library(ggplot2)
+library(tidyr)
+library(lubridate)
+df <- data.frame(Stage = c("Review literature" , "Hypothesis formulation"
+                           , "Get Data"          , "Data Cleansing"
+                           , "Data Validation"   , "Analysis"
+                           ,"Write Report")
+                 , Start = c("2022-01-01"      ,"2022-02-01"
+                             ,"2022-01-15"        ,"2022-02-15"
+                             ,"2022-02-17"        , "2022-02-17"
+                             , "2022-03-01")
+                 
+                 ,End = c("2022-02-01"         ,"2022-02-15"
+                          ,"2022-01-27"        ,"2022-02-20"
+                          ,"2022-03-01"        , "2022-03-17"
+                          , "2022-03-30")
+                 , Complete = c(TRUE, FALSE,TRUE, FALSE, FALSE, FALSE, FALSE))
+
+
+
+
+df$Start <- ymd(df$Start)
+df$End <- ymd(df$End)
+
+
+
+df.melt <- df%>%
+  tidyr::pivot_longer(col = c(Start,End))
+
+
+today <- as.Date('2022-02-05')
+pl <- ggplot(df.melt, aes(x = value, y = Stage, colour = Complete ))
+pl <- pl + geom_line( alpha = 0.2, size = 10)
+pl <- pl + geom_text(aes(label = format(value, "%d %b")), vjust = 0, angle = 0, size = 3, color = "black")
+pl <- pl +  theme_gray()
+pl <- pl + geom_vline(xintercept = today, color = "red", size = 2, alpha = 0.5)
+pl <- pl + labs(title = "Gantt Chart")
+pl <- pl + labs(subtitle = "created in ggplot #techanswers88")
+pl <- pl + labs(caption = "#techanswers88")
+pl <- pl + labs(x = "Date")
+pl <- pl + labs(y = "Items")
+pl <- pl + scale_color_manual(values = c("red", "blue"))
+pl <- pl + theme(legend.position = "none")
+pl <- pl + scale_x_date(name = "Dates"
+                        ,  date_labels = "%d %b"
+                        ,  date_breaks = "1 week"
+                        , minor_breaks = "1 day"
+                        ,  sec.axis =  dup_axis(name = "Week number",labels = scales::date_format('%W')))
+ggplotly(pl)
+```
+
+
+
+https://github.com/rehdenic/Gantt-Chart
+```{r}
+#Import Packages in R
+
+library(tidyverse)
+library(lubridate)
+library(scales)
+library(plotly)
+library(ggplot2)
+library(readxl)
+
+#Import Excel into R
+
+data = read_excel("Gantt_Dataset.xlsx") #Excel
+
+#Manipulate data from wide to long.
+
+data = data %>% 
+  gather(key = Phase, value = Phase_Date, -c(Project, Description)) %>%
+  arrange(Project, Phase_Date) %>%
+  mutate(Phase_Date = as.Date(Phase_Date)) %>%
+  mutate(Project = factor(Project, levels = rev(unique(Project)), ordered=TRUE)) %>% 
+  separate(Phase , c("A","B","C","D"), sep=" ") %>%
+  unite("Phase", A, C, D) %>%
+  unite("Phase_Type", B) %>% 
+  drop_na() %>% 
+  mutate(Phase = case_when(
+    Phase == "Actual_Phase_1" ~ "Actual Phase 1",
+    Phase == "Actual_Phase_2" ~ "Actual Phase 2",
+    Phase == "Actual_Phase_3" ~ "Actual Phase 3",
+    Phase == "Plan_Phase_1" ~ "Plan Phase 1",
+    Phase == "Plan_Phase_2" ~ "Plan Phase 2",
+    Phase == "Plan_Phase_3" ~ "Plan Phase 3",
+  )) %>% 
+  mutate(Phase = factor(Phase, levels = c("Actual Phase 1", "Actual Phase 2",
+                                          "Actual Phase 3", "Plan Phase 1",
+                                          "Plan Phase 2", "Plan Phase 3")))
+
+
+
+#Create theme for plot
+
+theme_gantt = function(){ 
+  font = "Arial"   
+  
+  theme_bw() %+replace%    #replace elements we want to change
+    
+    theme(
+      
+      #grid elements
+      
+      panel.background = element_rect(fill = "#ffffff", colour = NA),
+      panel.grid.major = element_blank(),    
+      panel.grid.minor = element_blank(),    
+      panel.border = element_blank(),
+      axis.ticks = element_blank(),
+      axis.ticks.x = element_line(size = 0.3, colour = "grey80"),
+      axis.line = element_blank(),
+      legend.position = "top",
+      legend.key = element_blank(),
+      
+      #text elements
+      
+      axis.text.x = element_text(angle = 45, hjust = 0.2),
+
+
+    )
+}
+
+#Defines the spacing of the dashed horizontal lines between each project.
+
+x.breaks.upper = seq(length(data$Project), by = -1)+0.5
+x.breaks.lower = seq(length(data$Project), by = -1)-0.5
+x.breaks = unique(c(rbind(x.breaks.upper,x.breaks.lower)))
+
+
+#Defines the first date of the current year.
+
+start_date = floor_date(Sys.Date() %m-% months(month(Sys.Date())), "month")+31
+
+# Build plot using ggplot2
+
+gantt = ggplot(data, aes(x = Project, y = Phase_Date, label = Description, colour = Phase)) + 
+  geom_line(size = 2, position = position_dodge(width = 1)) + 
+  geom_point(size = 1.5, position = position_dodge(width = 1)) +
+  geom_vline(xintercept = x.breaks, colour = "#6e7c7c", size = 0.1, linetype = 3) + 
+  geom_hline(yintercept = as.Date(start_date), colour = "#6e7c7c", size = 0.1, linetype = 3) +
+  guides(colour = guide_legend(title = NULL)) +
+  labs(x = NULL, y = NULL) + 
+  coord_flip() + 
+  scale_y_date(date_breaks = "1 year", labels = date_format("%Y"), position = "left",
+               limits = as.Date(c(min(as.Date(data$Phase_Date), na.rm = TRUE),max(as.Date(data$Phase_Date), na.rm = TRUE)))) +
+  scale_color_manual(values = c("#795091", "#9166A1", "#A77EB0", "#FF6600", "#FF781F", "#FF8B3D")) +
+  theme_gantt() 
+
+
+
+#Make plot interactive / dynamic by wrapping in plotly function ggplotly
+
+#Define font, size and color for hover function box text given by label
+
+font = list(
+  family = "Arial",
+  size = 12,
+  color = "white"
+)
+
+#Define hover function box font and bordercolor 
+
+label = list(
+  bordercolor = "transparent",
+  font = font
+)
+
+ggplotly(gantt, tooltip = c("Project", "Phase_Date", "Description", "Phase")) %>%
+  layout(dragmode = "pan", selectdirection = "v", hoverlabel = label, legend = list(orientation = "h", y = 1.2))
+
+
+
+```
+
+
+https://community.rstudio.com/t/avoid-ordering-hoverinfo-by-group-when-using-legendgroup-in-plotly/133432
+```{r}
+
+
+library(plotly)
+library(dplyr)
+df_plotly = structure(list(tt = 1:9, speaker = c("A", "T", "A", "T", "A", 
+    "T", "A", "T", "A"), min_time = c(42.328, 50.67, 53.297, 79.073, 
+    87.54, 116.569, 120.948, 122.45, 131.959), max_time = c(50.5, 
+    55.67, 81.573, 86.203, 112.938, 121.569, 125.948, 130.413, 136.959
+    ), line = c("</br> Garbage.</br>All I've been thinking about all week is garbage.</br>I mean, I can't stop thinking about it.", 
+    "</br> What kind of thoughts about garbage?", "</br> I just</br>I've gotten real concerned over what's gonna happen with all the garbage.</br>I mean, we've got so much of it.</br>You know? I mean, we have to run out of places to put this stuff eventually.</br>The last time I .</br>I started feelin' this way is when that barge was stranded</br>and, you know, it was going around the island and nobody would claim it.</br>Do you remember that?", 
+    "</br> Yes, I remember.</br>Do you have any idea what may have triggered this concern?", 
+    "</br> Yeah. Yeah.</br>You see, the other night, John was taking out the garbage,</br>and he kept spilling things out of the container,</br>and that made me</br>I started imagining, like,</br>a garbage can that produces garbage, and it doesn't stop.</br>It just keeps producing garbage, and it just keeps overflowing.</br>And, yy-you know, what would you do, you know, to try to stop something like that?", 
+    "</br> Ann, do you see any pattern here?", "</br> What do you mean?", 
+    "</br> Well, last week we were talking about your obsession</br>with the families of airline fatalities.</br>Now we're talking about your concern over the garbage problem.", 
+    "</br> Yeah? So?"), color = structure(c(1L, 2L, 1L, 2L, 1L, 2L, 
+    1L, 2L, 1L), .Label = c("#66C2A5", "#FC8D62"), class = "factor")), row.names = c(NA, 
+    -9L), class = c("tbl_df", "tbl", "data.frame"))
+
+
+
+fig = plot_ly() %>% layout(hovermode = "x unified")
+
+for(i in 1:2){
+  df = 
+    df_plotly %>% 
+    group_by(speaker) %>% 
+    filter(min_time == min(min_time)) %>% 
+    ungroup()
+  
+  fig <- add_lines(fig,
+                   x = c(df$min_time[i], df$max_time[i]),  # x0, x1
+                   y = c(df$speaker[i], df$speaker[i]),  # y0, y1
+                   name = df$speaker[i],
+                   mode = "lines",
+                   line = list(color = df$color[i], width = 20),
+                   legendgroup = df$speaker[i],
+                   showlegend = T,
+                   hoverinfo = "text",
+                   text = df$line[i],
+                   
+                   evaluate = T  # needed to avoid lazy loading
+  )
+}
+
+for(i in 1:(nrow(df_plotly) - 1)){
+  
+  df = 
+    df_plotly %>% 
+    group_by(speaker) %>% 
+    filter(min_time != min(min_time)) %>% 
+    ungroup()
+  
+  fig <- add_lines(fig,
+                   x = c(df$min_time[i], df$max_time[i]),  # x0, x1
+                   y = c(df$speaker[i], df$speaker[i]),  # y0, y1
+                   name = df$speaker[i],
+                   mode = "lines",
+                   line = list(color = df$color[i], width = 20),
+                   legendgroup = df$speaker[i],
+                   showlegend = F,
+                   hoverinfo = "text",
+                   text = df$line[i],
+                   
+                   evaluate = T  # needed to avoid lazy loading
+  )
+}
+
+fig 
+```
+
+https://briatte.github.io/ggnet/
+https://plotly.com/ggplot2/network-graphs/
+```{r}
+
+devtools::install_github("briatte/ggnet")
+library(plotly)
+library(ggnet)
+library(network)
+library(sna)
+library(ggplot2)
+
+# random graph
+net = rgraph(10, mode = "graph", tprob = 0.5)
+net = network(net, directed = FALSE)
+
+p <-ggnet2(net, size = 12, label = TRUE, label.alpha = 0.75, label.size = 5, color = "black", label.color = "white")
+
+ggplotly(p)
+```
+
+
+
+https://nrennie.rbind.io/blog/2022-06-06-creating-flowcharts-with-ggplot2/
+```{r}
+
+library(tidyverse)
+library(igraph)
+library(showtext)
+library(rcartocolor)
+
+goldilocks <- tibble(from = c("Goldilocks",
+                              "Porridge", "Porridge", "Porridge",
+                              "Just right",
+                              "Chairs", "Chairs", "Chairs",
+                              "Just right2",
+                              "Beds", "Beds", "Beds",
+                              "Just right3"),
+                     to = c("Porridge",
+                            "Too cold", "Too hot", "Just right",
+                            "Chairs",
+                            "Still too big", "Too big", "Just right2",
+                            "Beds",
+                            "Too soft", "Too hard", "Just right3",
+                            "Bears!"))
+g = graph_from_data_frame(goldilocks, directed = TRUE)
+coords = layout_as_tree(g)
+colnames(coords) = c("x", "y")
+output_df = as_tibble(coords) %>%
+  mutate(step = vertex_attr(g, "name"),
+         label = gsub("\\d+$", "", step),
+         x = x*-1,
+         type = factor(c(1, 2, 3, 2, 3, 2, 3, 3, 3, 3, 3, 3, 3, 1)))
+plot_nodes = output_df %>%
+  mutate(xmin = x - 0.35,
+         xmax = x + 0.35,
+         ymin = y - 0.25,
+         ymax = y + 0.25)
+
+
+plot_edges = goldilocks %>%
+  mutate(id = row_number()) %>%
+  pivot_longer(cols = c("from", "to"),
+               names_to = "s_e",
+               values_to = "step") %>%
+  left_join(plot_nodes, by = "step") %>%
+  select(-c(label, type, y, xmin, xmax)) %>%
+  mutate(y = ifelse(s_e == "from", ymin, ymax)) %>%
+  select(-c(ymin, ymax))
+
+
+p = ggplot() +
+  geom_rect(data = plot_nodes,
+            mapping = aes(xmin = xmin, ymin = ymin, 
+                          xmax = xmax, ymax = ymax, 
+                          fill = type, colour = type),
+            alpha = 0.5) 
+
+
+p = p + 
+  geom_text(data = plot_nodes,
+            mapping = aes(x = x, y = y, label = label),
+            family = "henny",
+            color = "#585c45") 
+
+p = p + 
+  geom_path(data = plot_edges,
+            mapping = aes(x = x, y = y, group = id),
+            colour = "#585c45",
+            arrow = arrow(length = unit(0.3, "cm"), type = "closed"))
+p = p + 
+  scale_fill_carto_d(palette = "Antique") +
+  scale_colour_carto_d(palette = "Antique")
+
+
+p = p + 
+  labs(title = "The Goldilocks Decision Tree",
+       caption = "N. Rennie\n\nData: Robert Southey. Goldilocks and the Three Bears. 
+       1837.\n\nImage: New York Public Library\n\n#30DayChartChallenge") 
+
+p = p + 
+  theme_void() +
+  theme(plot.margin = unit(c(1, 1, 0.5, 1), "cm"),
+        legend.position = "none",
+        plot.background = element_rect(colour = "#f2e4c1", fill = "#f2e4c1"),
+        panel.background = element_rect(colour = "#f2e4c1", fill = "#f2e4c1"),
+        plot.title = element_text(family = "henny", hjust = 0, face = "bold",
+                                  size = 40, color = "#585c45",
+                                  margin = margin(t = 10, r = 0, b = 10, l = 0)),
+        plot.caption = element_text(family = "henny", hjust = 0,
+                                    size = 10, color = "#585c45",
+                                    margin = margin(t = 10)))
+
+
+ggplotly(p)
+```
+
+
+
+https://plotly.com/ggplot2/geom_rect/
+```{r}
+library(plotly)
+
+# devtools::install_github("johannesbjork/LaCroixColoR")
+library(LaCroixColoR)
+library(dplyr)
+
+european_leaders <- read.csv("https://raw.githubusercontent.com/plotly/datasets/master/european_leaders.csv",
+                             stringsAsFactors = FALSE) %>%
+  mutate(stint_start = as.Date(stint_start),
+         stint_end = as.Date(stint_end),
+         median_x = as.Date(median_x),
+         left_right = as.character(left_right))
+
+p <- ggplot(european_leaders, aes(xmin=stint_start, xmax=stint_end, ymin=vert_min, ymax=vert_max, fill=left_right)) +
+  geom_rect(colour="white", size=0.1) +
+  geom_text(aes(x=median_x, y=median_y, size=size, label=pm_name, #all names of separate variables
+                text=paste(party_name_english, " (",country_name,")", sep=""))) +
+  scale_fill_manual(values=lacroix_palette("PassionFruit",type = "continuous", n=8)) + #matches left/right colours
+  labs(title = "Timeline of European leaders since 2000",
+       x = "year",
+       y = "",
+       fill = "Party's \nleft-right \nscore",
+       size = NULL) +
+  theme(axis.text.y = element_blank(), #y-axis doesn't have actual values; no need for labels
+        axis.ticks.y = element_blank())
+fig <- ggplotly(fig, tooltip = c("label", "text")) #how to select what shows on the tooltip
+
+fig
+```
+https://plotly.com/ggplot2/geom_rect/
+```{r}
+library(plotly)
+
+library(dplyr)
+
+df <- data.frame(name = c("Nixon", "Ford", "Carter", "Reagan", "Bush", "Clinton", "Bush", "Obama"),
+                   start = as.Date(c("1969-01-20", "1974-08-09", "1977-01-20", "1981-01-20",
+                             "1989-01-20", "1993-01-20", "2001-01-20", "2009-01-20")),
+                   end = as.Date(c("1974-08-09", "1977-01-20", "1981-01-20", "1989-01-20", 
+                           "1993-01-20", "2001-01-20", "2009-01-20", "2017-01-20")),
+                   party = c("R", "R", "D", "R", "R", "D", "R", "D"),
+                   stringsAsFactors = FALSE) %>%
+  mutate(median_x = start + floor((end-start)/2))
+
+p <- ggplot(economics, aes(x=date,y=unemploy)) +
+  geom_rect(data=df, aes(NULL,NULL,xmin=start,xmax=end,fill=party),
+            ymin=0,ymax=16000, colour="white", size=0.5, alpha=0.2) +
+  scale_fill_manual(values=c("R" = "red", "D" = "blue")) +
+  geom_line() +
+  geom_text(data=df,aes(x=median_x,y=3000,label=name), size=3) +
+  labs(title = "Unemmployment numbers since 1967",
+       y = "No. unemployed (x 1000)")
+fig <- ggplotly(p)
+
+fig
+```
+
+
+
+https://towardsdatascience.com/interactive-power-bi-custom-visuals-with-r-a6a4ac998710
+https://chart-studio.plotly.com/~fred_tasker/7.embed
+https://github.com/fredwise/PM_timeline/blob/master/pm_timeline_ggplot.R
+```{r}
+
+
+##
+## Summary: Plot UK Prime Ministers timeline
+##
+## GitHub: https://github.com/fredwise/PM_timeline
+##
+## Author: Fred Tasker
+##
+## Date Created: 2020-05-30
+##
+## Copyright (c) Wise Technical Ltd, 2020
+## Email: fred@wisetechltd.com
+##
+library(plotly)
+library(jsonlite)
+library(ggplot2)
+library(lubridate)
+library(data.table)
+library(magrittr)
+prime_ministers <-
+  fromJSON(
+    'https://raw.githubusercontent.com/TimelineConsortium/Timeline-Data/master/uk-prime-ministers.json'
+  ) %>% as.data.table %>% .[,facet:=NULL]
+
+setnames(
+  prime_ministers,
+  c('content_text', 'category'), #old
+  c('name', 'party') #new
+)
+
+#Dates
+prime_ministers[, start_date := ymd(substr(start_date, 0, 10))]
+prime_ministers[, end_date := ymd(substr(end_date, 0, 10))]
+setorder(prime_ministers,start_date)
+
+# Colours for the political parties
+parties <-
+  c("Whig", "Tory", "Conservative", "Peelite", 'Liberal', 'Labour')
+party_colours <-
+  c("#FF7F00",    "#98285C","#0087DC",'#0660C4','#FDBB30',"#DC241f")
+
+prime_ministers[, party := factor(party, levels = parties, ordered = TRUE)]
+
+#Add a decade column
+prime_ministers[, decade := floor_date(start_date, "10 years")]
+prime_ministers[, number_in_decade := 1:.N, by = decade]
+
+# Alternate label positions up and down each decade
+positions <- c(0.5, -0.5, 1.7, -1.7, 2.9, -2.9)
+directions <- c(1,-1)
+
+decades <- unique(prime_ministers$decade)
+
+# A small table to define the direction of vertical lines / text on timeline
+line_pos <- data.table(
+  "decade" = decades,
+  "position" = rep(positions, length.out = (length(decades))),
+  "direction" = rep(directions, length.out = (length(decades)))
+)
+
+# Merge with prime minister dataset
+prime_ministers <- prime_ministers[line_pos, on = 'decade']
+
+# Create a plot position for prime minister name text, so they don't clash
+text_offset <- 0.25
+prime_ministers[, text_position :=
+                  (number_in_decade * text_offset * direction)
+                + position]
+
+# Decade data.table to label the axis on timeline
+decade_dt <- unique(prime_ministers[,.(decade,direction)])
+decade_dt[,decade_label := year(decade)]
+
+
+## Create plot
+p <- ggplot(prime_ministers)
+
+p <- p + labs(col = "Party") + theme_classic()
+
+p <- p + scale_color_manual(values = party_colours,
+                            labels = parties,
+                            drop = FALSE)
+p <- p + scale_fill_manual(values = party_colours,
+                           labels = parties,
+                           drop = FALSE)
+
+p <- p + geom_hline(yintercept = 0,
+                    color = "black",
+                    size = 0.3)
+
+# Vertical lines for each decade
+p <- p + geom_segment(
+  data = prime_ministers[number_in_decade == 1],
+  aes(y = position, yend = 0,x=decade, xend = decade),
+  color = 'lightgray',
+  size = 0.2
+)
+
+#Little marker on each decade, jitter so that political parties don't overlap
+p <- p + geom_point(aes(x=start_date, y=0,colour = party
+), 
+shape = 3
+
+)
+
+# Don't show axes, appropriately position legend
+p <- p + theme(
+  axis.line.y = element_blank(),
+  axis.text.y = element_blank(),
+  axis.title.x = element_blank(),
+  axis.title.y = element_blank(),
+  axis.ticks.y = element_blank(),
+  axis.text.x = element_blank(),
+  axis.ticks.x = element_blank(),
+  axis.line.x = element_blank(),
+  legend.position = "top",
+  legend.text = element_text(size = 10),
+  legend.title = element_text(size = 10)
+) + guides(col = guide_legend(nrow=1))
+
+# Show decade label
+p <- p + geom_text(
+  data = decade_dt,
+  aes(
+    x = decade,
+    y = direction*-0.2,
+    label = decade_label,
+  ),
+  size = 3,
+  color = 'gray47'
+)
+
+# Show project text
+p <- p +  geom_label(aes(label = name,fill=party,
+                         x=decade
+                         ,y = text_position), 
+                     size = 3,# family = 'mono',
+                     label.padding=unit(0.15,'lines'),colour = 'black',
+                     label.size = 0,alpha = 0.3,show.legend = F)
+
+p
+ggplotly(p)
+```
+
+
+```{r}
+library(timevis)
+
+data <- data.frame(
+  id      = 1:4,
+  content = c("Item one", "Item two",
+              "Ranged item", "Item four"),
+  start   = c("2016-01-10", "2016-01-11",
+              "2016-01-20", "2016-02-14 15:00:00"),
+  end     = c(NA, NA, "2016-02-04", NA)
+)
+
+timevis(data)
+
+```
+
+
+https://www.khstats.com/blog/trt-timelines/trt-timelines
+```{r}
+library(tidyverse)
+set.seed(7)
+n <- 50 # The data sets I make these visualizations for are typically 100-500 patients in size, but for space purposes I'll set my n to only 50.
+dat <- 
+  tibble(.rows = n) %>%  # empty data frame / tibble with n rows
+  mutate(pt_id = factor(row_number()),  # patient ids are 1-n
+         pt_trt_prob = runif(n,0,1), # randomly generate a treatment probability for each patient so we can see patterns
+         months_followup = round(runif(n, 0, 20)), # randomly generate length of time in the study
+         death = rbinom(n, 1, .5)) %>% # death randomly occurs at any time point. Obviously an unrealistic assumption. :)
+  group_by(pt_id) %>%   # group by patient so we can do more data manipulation
+  complete(months_followup = full_seq(0:max(months_followup), 1)) %>% # add i^n all the months patients are in the study
+  fill(pt_trt_prob, .direction = "up") %>% # fill in the treatment probability I made earlier so I can use this to add treatment for every time point
+  ungroup() %>% # no longer need patients grouped
+  mutate(trt = factor(rbinom(row_number(), 1, pt_trt_prob^2)),  # fill in treatment for everyone based on their treatment probability
+         death = replace_na(death, 0)) %>%  # also fill in death
+  select(pt_id, months_followup, trt, death) # remove leftover columns from data generation
+knitr::kable(head(dat))
+p<-dat %>%
+  group_by(pt_id) %>%
+  mutate(last_month_followup = max(months_followup), 
+         month_death = case_when(death == 1 ~ last_month_followup, TRUE ~ NA_real_)) %>%
+  ungroup() %>%
+  mutate(pt_id = fct_rev(fct_reorder(pt_id, last_month_followup)),
+         # make the treatment variable labels nicer
+         trt = factor(trt, levels=0:1, labels=c("No","Yes"))) %>%
+  ggplot(aes(x = months_followup, y = pt_id, group = pt_id, col = trt)) +
+  geom_line()  + 
+  geom_point(shape = 15) + 
+  geom_point(aes(x = month_death, y = pt_id), col = "black", shape = 4) +
+  theme_bw() +
+  labs(x = "Months of Follow-Up", y = "Patient ID", col = "Treatment",
+       title = "Patient Treatment Timeline",
+       subtitle = "x indicates month of patient death") +
+  # edit legend box and make patient ids small
+  theme(axis.text.y = element_text(size=6),
+        legend.position = c(.6, .9), legend.direction = "horizontal",
+        legend.background = element_rect(linetype="solid", colour ="black")) +
+  # remove extra space around timeline
+  scale_x_continuous(expand=c(0.01,0.01)) +
+  # set the color of the lines and points
+  scale_color_manual(values=c("dodgerblue","firebrick1"))
+
+ggplotly(p)
+
+```
+
+

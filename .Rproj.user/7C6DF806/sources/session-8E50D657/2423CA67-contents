@@ -1,0 +1,146 @@
+
+suppressPackageStartupMessages(require(colorout))
+
+.env <- new.env()
+source('~/scripts/R_Utils.R',local=.env)
+# ls.str(.env)
+# search()
+
+
+## Increase the size of my Rhistory file, becasue I like to use the up arrow!
+Sys.setenv(R_HISTSIZE='100000')
+## Create invisible environment ot hold all your custom functions
+
+## Single character shortcuts for summary() and head().
+.env$s <- base::summary
+.env$h <- utils::head
+#ht==headtail, i.e., show the first and last 10 items of an object.
+.env$ht <- function(d) rbind(head(d,10),tail(d,10))
+
+.env$g <- ggplot2::ggplot
+
+## Read data on clipboard.
+.env$read.cb <- function(...) {
+  ismac <- Sys.info()[1]=="Darwin"
+  if (!ismac) read.table(file="clipboard", ...)
+  else read.table(pipe("pbpaste"), ...)
+}
+## List objects and classes.
+# .env$lsa <- function() {
+# {
+#     obj_type <- function(x) class(get(x, envir = .GlobalEnv)) # define environment
+#     foo = data.frame(sapply(ls(envir = .GlobalEnv), obj_type))
+#     foo$object_name = rownames(foo)
+#     names(foo)[1] = "class"
+#     names(foo)[2] = "object"
+#     return(unrowname(foo))
+# }
+# ## List all functions in a package.
+# .env$lsp <-function(package, all.names = FALSE, pattern) {
+#     package <- deparse(substitute(package))
+#     ls(
+#         pos = paste("package", package, sep = ":"),
+#         all.names = all.names,
+#         pattern = pattern
+#     )
+# }
+# ## Open Finder to the current directory. Mac Only!
+# .env$macopen <- function(...) if(Sys.info()[1]=="Darwin") system("open .")
+# .env$o       <- function(...) if(Sys.info()[1]=="Darwin") system("open .")
+# ## Attach all the variables above
+# attach(.env)
+# ## Finally, a function to print out all the functions you have defined in the .Rprofile.
+# print.functions <- function(){
+#     cat("s() - shortcut for summaryn",sep="")
+#     cat("h() - shortcut for headn",sep="")
+#     cat("read.cb() - read from clipboardn",sep="")
+#     cat("lsa() - list objects and classesn",sep="")
+#     cat("lsp() - list all functions in a packagen",sep="")
+#     cat("macopen() - open finder to current working directoryn",sep="")
+# }
+
+
+
+
+
+
+
+if (interactive() && requireNamespace("rsthemes", quietly = TRUE)) {
+  
+  
+  #https://www.garrickadenbuie.com/project/rsthemes/
+  rsthemes::set_theme_favorite("base16 Gruvbox light, medium {rsthemes}")
+  rsthemes::set_theme_favorite("base16 Brewer {rsthemes}")
+  rsthemes::set_theme_favorite("Yule RStudio {rsthemes}")
+  rsthemes::set_theme_favorite("Night Owl {rsthemes}")
+  rsthemes::set_theme_favorite("Merbivore")
+  rsthemes::set_theme_favorite("base16 Gruvbox light, soft {rsthemes}")
+  rsthemes::set_theme_favorite("Mojave Dark")
+  rsthemes::set_theme_favorite("Fairyfloss {rsthemes}")
+  rsthemes::set_theme_favorite("One Light {rsthemes}" )
+  rsthemes::set_theme_favorite("base16 Google Light {rsthemes}")
+  rsthemes::set_theme_favorite("Synthwave85") # dark theme
+  rsthemes::set_theme_favorite("base16 Gruvbox dark, medium {rsthemes}") # dark theme
+  
+  
+  # Set preferred themes if not handled elsewhere..
+  rsthemes::set_theme_light("base16 Gruvbox light, medium {rsthemes}")  # light theme
+  rsthemes::set_theme_light("One Light {rsthemes}")  # light theme
+  rsthemes::set_theme_light("Gruvbox Light Custom") 
+  # rsthemes::set_theme_dark("Synthwave85") # dark theme
+  rsthemes::set_theme_dark("Gruvbox Dark Custom") 
+  rsthemes::set_theme_dark("TG_GruvDark")
+  
+
+
+
+  # Whenever the R session restarts inside RStudio...
+  setHook("rstudio.sessionInit", function(isNewSession) {
+    # Automatically choose the correct theme based on time of day
+    rsthemes::use_theme_auto(dark_start = "19:00", dark_end = "6:00")
+  }, action = "append")
+}
+
+
+#start with a quote from The Good Place (requires goodshirt package) 
+#spoken by a random ASCII animal (requires cowsay package)
+
+if (interactive() && require("rvest", 
+                             quietly = TRUE)) {
+  
+  url = read_html("https://en.wikiquote.org/wiki/Wikiquote:Quote_of_the_Day")
+  dat = html_nodes(url, "dd")
+  quote1 = html_text(dat)
+  dat2 = html_nodes(url, "li")
+  quote2 = html_text(dat2)
+  quote=suppressWarnings(rbind(quote1,quote2))
+  rand = ceiling(stats::runif(1)*5880)
+  quote[rand]
+  phrase = "in"
+  q=quote[sample(grep(phrase,quote,ignore.case = T),1)]
+  cowsay::say(q,
+              by = "random",
+              what_color = crayon::blue$bold,
+              by_color = crayon::blue$bold)
+  
+  # then get some random praise to get you started for the day (requires the praise package) 
+  
+  message("\n\nHappy Coding Thomas!", "💜")
+  message(praise::praise())
+  rm(dat,dat2,quote,url,quote1,quote2,rand,phrase,q)
+}
+
+
+
+# https://github.com/gadenbuie/shrtcts
+if (interactive() && requireNamespace("shrtcts", quietly = TRUE)) {
+  # .imageclipr_env <- new.env(parent = emptyenv())
+  .imageclipr_env <- new.env()
+  source('~/scripts/imgClipR.R',local=.imageclipr_env)
+  source('~/scripts/R_Utils.R',local=.imageclipr_env)
+  
+  shrtcts::add_rstudio_shortcuts(path="~/scripts/.shrtcts.R")
+  
+  #shrtcts::add_rstudio_shortcuts()
+}
+

@@ -1,0 +1,19 @@
+"0","#| column: page"
+"0","gpp <- joinC %>% ggplot(aes(fill=Group,label1=Name,label3=Birthplace,label5=Death_Year))+"
+"0","  stat_summary(aes(x=Birth_Year,y = Age), fun = ""identity"", geom = ""bar"",alpha=.5)+ "
+"0","  theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust = 1),"
+"0","        axis.title.y=""Age At Death"")+ggtitle(""Age Across Years"")+"
+"0","  scale_x_continuous(breaks=seq(1500,1940,by=10))"
+"0",""
+"0","ggplotly(gpp,tooltip = c(""Name"",""Year"",""Birth_Year"",""Death_Year"",""Birthplace"",""Age""),"
+"0","         width=1000,height=1800) %>% "
+"0","   plotly_camera() %>% layout(width=""1000"",height=""1000"",plot_bgcolor=""#fcfcfc"")"
+"1","[1m[33mError[39m in `mapply()`:[22m
+[38;5;236m[33m![38;5;236m The `axis.title.y` theme element must be a [34m<element_text>[38;5;236m object.[39m
+Backtrace:
+[90m  1. [39m... %>% ...
+[90m 13. [39m[1mplotly[22m:::ggplotly.ggplot(...)
+[90m 14. [39mplotly::gg2list(...)
+[90m 15. [39mggfun(""plot_theme"")(plot)
+[90m 16. [39m[1m[94mbase::mapply([39m[22mvalidate_element, theme, names(theme), MoreArgs = list(element_tree = get_element_tree())[1m[94m)[39m[22m
+"

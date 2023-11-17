@@ -1,0 +1,24 @@
+---
+title: "Videos"
+format: html
+---
+
+
+```{r echo=FALSE}
+source(here::here("Resource_Overview/R", "youtube-playlist.R"))
+#playlist_id <- "PLwBFYrxSPwFVQL3Ro6LfygIEZwLAq6ZeS"
+
+Bv_Videos <- tibble::tribble(
+  ~youtube_id,   ~title, ~active,
+  "00o_U5bovb0", "Applications of the Bias-Variance Decomposition to Human Forecasting", TRUE,
+  "FcXQKsZKRUs", "The Bias Variance Trade-Off", TRUE
+)
+
+# https://www.youtube.com/watch?v=46UcP8mnIHs&ab_channel=DeepMath
+```
+
+
+```{r show-youtube-list, echo=FALSE, results="asis"}
+youtube_list2(Bv_Videos)
+```
+
