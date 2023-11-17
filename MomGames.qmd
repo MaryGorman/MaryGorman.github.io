@@ -3,11 +3,20 @@ title: "Game Links"
 ---
 
 ### Word/Language Games
-- [Language Guesser](https://languageguesser.com)
+- [Wordleverse](https://wordleverse.net/games)
+- [Crosswordle](https://crosswordle.vercel.app/)
+- [Absurdle](https://qntm.org/files/absurdle/absurdle.html)
+- [Pimantle](https://semantle.pimanrul.es/)
 - [Semantris](https://research.google.com/semantris/)
 - [Semantle Original](https://semantle.com/)
 - [Semantle Junior](https://semantle.com/junior)
 - [Alphabattle](https://alphabattle.xyz)
+- [Language Guesser](https://languageguesser.com)
+- [Quordle](https://www.merriam-webster.com/games/quordle)
+- [Merriam-Webster Games](https://www.merriam-webster.com/games)
+- [Waffle](https://wafflegame.net/) 
+
+
 
 ### Picture Games
 - [ChronoPhoto](https://www.chronophoto.app/web.html)
@@ -19,9 +28,13 @@ title: "Game Links"
 - [Color Names](https://colornames.org/)
 
 ### Music/Auditory Games
+- [Musicle](https://musicle.app/) 
+- [Heardle](https://heardlewordle.io/)
+- [Bandle](https://bandle.app/) 
 - [Toned Ear](https://tonedear.com/)
 - [Rhythm Game](https://www.concerthotels.com/got-rhythm)
-- [Flagle](https://ducc.pythonanywhere.com/flaggle/)
+
+
 
 ### Map Games
 - [Geoguessr Maps](https://www.geoguessr.com/quiz/seterra)
@@ -31,6 +44,13 @@ title: "Game Links"
 - [Virtual Vacation Guess](https://virtualvacation.us/guess)
 - [Globle](https://globle-game.com/)
 - [Worldle](https://worldle.teuteuf.fr/)
+- [Flaggle](https://ducc.pythonanywhere.com/flaggle/)
+
+### Price Guessers
+
+- [Housle](https://housle.house/)
+- [Listed](https://listed.fun/)
+- [Listed Chicago](https://listed.fun/chi)
 
 ### Miscellaneous 
 - [Concentrick](https://concentrick.app)
@@ -41,9 +61,9 @@ title: "Game Links"
 - [Neatness](https://js13kgames.com/games/the-neatness/index.html)
 - [The Wikipedia Game](https://www.thewikipediagame.com/)
 - [Tradle](https://games.oec.world/en/tradle/)
-- [Listed](https://listed.fun/)
-- [Listed Chicago](https://listed.fun/chi)
-- [NY Times Connections Game](https://www.nytimes.com/games/connections)
+- [NYT Connections Game](https://www.nytimes.com/games/connections)
 - [Neal.fun](https://neal.fun/)
 - [Higher Lower Game](https://www.higherlowergame.com/)
 - [Fosiper](https://fosiper.com/games/)
+- [Chronogram](https://chronogram.chat/)
+- [Movie to Movie](https://movietomovie.com/)
