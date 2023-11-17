@@ -3,12 +3,27 @@ title: "Game Links"
 ---
 
 
-[Flagle](https://ducc.pythonanywhere.com/flaggle/) \
-[Hue](https://hue-the-game.herokuapp.com)
-
+### Word Games
 [Language Guesser](https://languageguesser.com) \ 
 
-[Geography Games](https://www.geoguessr.com/seterra/en/vgp/3007) \
+
+### Color Games
+[Hue](https://hue-the-game.herokuapp.com)
+
+
+### Music/auditory games
+
+[Toned Ear](https://tonedear.com/)
+[Rhythm Game](https://www.concerthotels.com/got-rhythm)
+[Flagle](https://ducc.pythonanywhere.com/flaggle/) \
+
+
+### Map Games
+
+[Geoguesser](https://www.geoguessr.com/seterra/en/vgp/3007) \
+
+
+### Miscellaneous 
 
 [Concentrick](https://concentrick.app) \
 [Alphabattle](https://alphabattle.xyz) \
@@ -22,7 +37,3 @@ title: "Game Links"
 
 [Perfect Circle](https://vole.wtf/perfect-circle/) \
 [Neatness](https://js13kgames.com/games/the-neatness/index.html)
-
-
-[Toned Ear](https://tonedear.com/)
-[Rhythm Game](https://www.concerthotels.com/got-rhythm)
