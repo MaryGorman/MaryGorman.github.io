@@ -25,9 +25,26 @@ title: "Misc Links"
 
 [Bard](https://bard.google.com/chat)
 
+[Perplexity](https://www.perplexity.ai/)
+
 [Claude](claude.ai)
 
 [Census GPT](https://censusgpt.com/)
 
 [Chatbot Arena](https://chat.lmsys.org/?arena)
+
+[Talk to Books](https://books.google.com/talktobooks/)
+[Verse By Verse](https://sites.research.google/versebyverse/)
+
+
+
+### AI Art Creation
+
+[Stable Diffusion Demo](https://huggingface.co/spaces/runwayml/stable-diffusion-v1-5)
+
+[Replicate AI](https://replicate.com/stability-ai/stable-diffusion)
+
+[Mage Space](https://www.mage.space/)
+
+[Craiyon](https://www.craiyon.com/)
 

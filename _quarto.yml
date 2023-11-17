@@ -19,7 +19,7 @@ website:
         file: WingTree.qmd
       - text: Games
         file: MomGames.qmd
-      - text: Misc. Links
+      - text: Misc
         file: MiscMom.qmd
       
       

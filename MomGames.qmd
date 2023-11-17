@@ -15,6 +15,8 @@ title: "Game Links"
 
 ### Color Games
 - [Hue](https://hue-the-game.herokuapp.com)
+- [Color Method](https://color.method.ac/)
+- [Color Names](https://colornames.org/)
 
 ### Music/Auditory Games
 - [Toned Ear](https://tonedear.com/)
@@ -22,7 +24,7 @@ title: "Game Links"
 - [Flagle](https://ducc.pythonanywhere.com/flaggle/)
 
 ### Map Games
-- [Geoguessr](https://www.geoguessr.com/seterra/en/vgp/3007)
+- [Geoguessr Maps](https://www.geoguessr.com/quiz/seterra)
 - [JetPunk Country Quiz](https://www.jetpunk.com/quizzes/how-many-countries-can-you-name)
 - [Travle](https://imois.in/games/travle/)
 - [Travle USA](https://imois.in/games/travle/usa/)
@@ -40,7 +42,7 @@ title: "Game Links"
 - [The Wikipedia Game](https://www.thewikipediagame.com/)
 - [Tradle](https://games.oec.world/en/tradle/)
 - [Listed](https://listed.fun/)
-- [Listed Chi](https://listed.fun/chi)
+- [Listed Chicago](https://listed.fun/chi)
 - [NY Times Connections Game](https://www.nytimes.com/games/connections)
 - [Neal.fun](https://neal.fun/)
 - [Higher Lower Game](https://www.higherlowergame.com/)
