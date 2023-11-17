@@ -34,6 +34,8 @@ format:
     toc: true
     toc-location: right
     smooth-scroll: true
+    link-external-newwindow: true
+    link-external-filter: '^(?:http:|https:)\/\/www\.marygorman.github.io\.com\/custom'
 
 execute:
   freeze: true  # never re-render during project render
