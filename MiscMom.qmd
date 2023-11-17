@@ -7,7 +7,7 @@ title: "Misc Links"
 
 
 
-[ebird](https://ebird.org) \
+- [ebird](https://ebird.org) \
 
 ::: {.column-margin}
 
@@ -16,35 +16,35 @@ title: "Misc Links"
 
 :::
 
-[All About Birds](https://merlin.allaboutbirds.org)
+- [All About Birds](https://merlin.allaboutbirds.org)
 
 
 ### AI Chat
 
-[ChatGPT](https://chat.openai.com/)
+- [ChatGPT](https://chat.openai.com/)
 
-[Bard](https://bard.google.com/chat)
+- [Bard](https://bard.google.com/chat)
 
-[Perplexity](https://www.perplexity.ai/)
+- [Perplexity](https://www.perplexity.ai/)
 
-[Claude](claude.ai)
+- [Claude](claude.ai)
 
-[Census GPT](https://censusgpt.com/)
+- [Census GPT](https://censusgpt.com/)
 
-[Chatbot Arena](https://chat.lmsys.org/?arena)
+- [Chatbot Arena](https://chat.lmsys.org/?arena)
 
-[Talk to Books](https://books.google.com/talktobooks/)
-[Verse By Verse](https://sites.research.google/versebyverse/)
+- [Talk to Books](https://books.google.com/talktobooks/)
+- [Verse By Verse](https://sites.research.google/versebyverse/)
 
 
 
 ### AI Art Creation
 
-[Stable Diffusion Demo](https://huggingface.co/spaces/runwayml/stable-diffusion-v1-5)
+- [Stable Diffusion Demo](https://huggingface.co/spaces/runwayml/stable-diffusion-v1-5)
 
-[Replicate AI](https://replicate.com/stability-ai/stable-diffusion)
+- [Replicate AI](https://replicate.com/stability-ai/stable-diffusion)
 
-[Mage Space](https://www.mage.space/)
+- [Mage Space](https://www.mage.space/)
 
-[Craiyon](https://www.craiyon.com/)
+- [Craiyon](https://www.craiyon.com/)
 
