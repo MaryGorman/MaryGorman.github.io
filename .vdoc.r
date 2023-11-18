@@ -1,0 +1,301 @@
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#| include: false
+#library(googledrive)
+library(readxl)
+# BiocManager::install("RedeR")
+#library(RedeR)
+library(tidyverse)
+library(plotly)
+library(tippy)
+library(simplevis)
+
+#|eval: false
+
+# df <- drive_find(n_max = 30)
+# df <- drive_find(pattern="Wing Family Tree")
+# wft <- drive_get(id='1xHgnEs9QcfFNXvEpM9M_OMCjqovkz0ZpNFpNArJlBYE')
+# drive_download(wft)
+#
+#
+#
+#
+#| column: page-right
+# fn <- list.files(pattern="*.xlsx|*.csv")
+fn <- list.files(pattern="*.xlsx")
+ sheets <- excel_sheets(fn)
+# tibble <- lapply(sheets, function(x) readxl::read_excel(fn, sheet = x))
+# data_frame <- lapply(tibble, as.data.frame)
+main <- readxl::read_excel(fn, sheet = "TG2") %>% mutate(pair=row_number()) %>% group_by(Generation) %>%
+  mutate(pg=n(),group_id=cur_group_id(),pg2=as.numeric(row_number())*650,pgNorm=pg2+(1000/pg))
+mL <- main %>% pivot_longer(cols=c(Female_Name,Male_Name))
+
+
+men <- main %>% select(Male_Name,Male_Date,Husband_birth,Husband_death,Generation,pair,pg2,pgNorm) %>%
+  mutate(ind=regexpr("-",Male_Date),
+         Birth_Year=as.numeric(substr(Male_Date,1,ind-1)),
+         Death_Year=as.numeric(substr(Male_Date,ind+1,nchar(Male_Date))),
+          Age=as.numeric(Death_Year-Birth_Year),
+         pair=fct_rev(as.factor(pair)),
+         'Birth Year'=Birth_Year,
+         'Death Year'=Death_Year,
+         Group="Men",
+         Generation=as.factor(Generation)) %>% 
+  dplyr::rename(Name=Male_Name,Date=Male_Date,Birthplace=Husband_birth,Death_Location=Husband_death) %>%  
+  purrr::map_df(~replace(.,is.na(.),"Unknown")) %>% 
+  mutate(Name=as.factor(Name),y=as.numeric(Generation), ymin=y-.25,
+         ymax=y+.25,x=as.numeric(pgNorm)*5,xmin=x-900,xmax=x+900) %>%
+  as.data.frame()
+  
+menC <- men %>% filter(!(Age=="Unknown")) %>% mutate_at(c('Age','Birth_Year',"Death_Year"),as.numeric)
+menL <- menC %>% pivot_longer(cols=c(Birth_Year,Death_Year),names_to="Event",values_to="Year") %>% mutate(Year=as.numeric(Year))
+
+  
+  #replace_na(.,list(rep("Unknown",ncol(men))))
+
+
+women <- main %>% select(Female_Name,Female_Date,Wife_birthplace,Wife_deathplace,Generation,pair,pg2,pgNorm) %>%
+  mutate(ind=regexpr("-",Female_Date),
+         Birth_Year=as.numeric(substr(Female_Date,1,ind-1)),
+         Death_Year=as.numeric(substr(Female_Date,ind+1,nchar(Female_Date))),
+          Age=as.numeric(Death_Year-Birth_Year),
+         pair=fct_rev(as.factor(pair)),
+         'Birth Year'=Birth_Year,
+         'Death Year'=Death_Year,
+         Group="Women",
+         Generation=as.factor(Generation)) %>% 
+  dplyr::rename(Name=Female_Name,Date=Female_Date,Birthplace=Wife_birthplace,Death_Location=Wife_deathplace) %>%  
+  purrr::map_df(~replace(.,is.na(.),"Unknown")) %>% 
+  mutate(Name=as.factor(Name),y=as.numeric(Generation), ymin=y-.25,
+         ymax=y+.25,x=as.numeric(pgNorm)*5,xmin=x-900,xmax=x+900) %>%
+  as.data.frame()
+  
+womenC <- women %>% filter(!(Age=="Unknown")) %>% mutate_at(c('Age','Birth_Year',"Death_Year"),as.numeric)
+womenL <- womenC %>% pivot_longer(cols=c(Birth_Year,Death_Year),names_to="Event",values_to="Year") %>% mutate(Year=as.numeric(Year))
+
+
+joinC <- base::rbind(menC,womenC) %>% arrange(Birth_Year)
+
+#
+#
+#
+#
+#
+#
+#| column: page-right
+joinC %>% select(Name,Birth_Year,Death_Year,Age,Birthplace,Death_Location,Group) %>% 
+  DT::datatable(extensions=c('Buttons','ColReorder','AutoFill','Responsive'),
+                options=list(pageLength=20,dom = 'Bfrtip',colReorder=TRUE, buttons = c('copy', 'csv', 'excel', 'pdf', 'print')),
+    caption = htmltools::tags$caption(
+    style = 'caption-side: top; text-align: left;',
+    'Table 2: ', htmltools::em('Click Column Headers to Sort. Drag to rearrange.') )
+  )
+                                                                                                 
+#joinC %>% select(Name,Birth_Year,Death_Year,Age,Birthplace,Death_Location,Group) %>% reactable::reactable()
+
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#| label: fig-age-time2
+#| fig.cap: Age Over Time - Alternate (hover for info)
+#| eval: false
+#| include: false
+gpp <- joinC %>% ggplot(aes(fill=Group,label1=Name,label3=Birthplace,label5=Death_Year))+
+  stat_summary(aes(x=Birth_Year,y = Age), fun = "identity", geom = "bar",alpha=.5)+ 
+  theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust = 1),
+        axis.title.y=element_text("Age At Death"),
+        title = element_text("Age Across Years"))+
+  scale_x_continuous(breaks=seq(1500,1940,by=10))
+
+ggplotly(gpp,tooltip = c("Name","Year","Birth_Year","Death_Year","Birthplace","Age"),
+         width=1000,height=1800) %>% 
+    layout(width="700",height="600",plot_bgcolor="#fcfcfc")
+   
+
+
+#
+#
+#
+#| include: false
+#| column: page-right
+
+# menC %>% ggplot(aes(x=Birth_Year,y=Age))+geom_bar(stat="identity")
+# menC %>% ggplot(aes(x=Birth_Year,y=Age))+geom_point()
+# menC %>% ggplot(aes(x=Birth_Year,y=Age))+geom_line()
+# menC %>% ggplot(aes(x=Birth_Year,y=Age))+geom_bar(stat="identity")
+
+# gpp <- menC %>% ggplot(aes(label1=Name,label3=Birthplace,label5=Death_Year))+
+#   stat_summary(aes(x=Birth_Year,y = Age), fun = "identity", geom = "bar")+ 
+#   theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust = 1))
+# 
+# ggplotly(gpp,tooltip = c("Name","Year","Birth_Year","Death_Year","Birthplace","Age"),
+#          width=1000,height=1800) %>% 
+#    plotly_camera() %>% layout(width="1000",height="1000",plot_bgcolor="#fcfcfc")
+#    
+
+
+#
+#
+#
+#| include: false
+#| column: page
+# 
+# gpp <- womenC %>% ggplot(aes(label1=Name,label3=Birthplace,label5=Death_Year))+
+#   stat_summary(aes(x=Birth_Year,y = Age), fun = "identity", geom = "bar")+ 
+#   theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust = 1))
+# 
+# ggplotly(gpp,tooltip = c("Name","Year","Birth_Year","Death_Year","Birthplace","Age"),
+#          width=1000,height=1800) %>% 
+#    plotly_camera() %>% layout(width="1000",height="1000",plot_bgcolor="#fcfcfc")
+
+#
+#
+#
+#
+#
+#
+#
+#
+#| column: page-right
+
+YearSeq <- seq(1500,1950,by=15)
+### | column: page
+# menL %>% filter(!(Age=="Unknown"))  %>% ggplot(aes(x=Year,y=pair))+
+#   geom_point(shape=15)+geom_line(aes(group=pair))+
+#   theme(axis.text.x = element_text(angle = -20, vjust = 0.5, hjust = 1))+
+#   scale_x_continuous(breaks=seq(1500,1940,by=10))
+  #scale_x_discrete(breaks=YearSeq,limits=c(1515,1930))
+
+mgbd <- menL %>% filter(!(Age=="Unknown")) %>% 
+  ggplot(aes(x=Year,y=pair,color=Generation,label=Name,label2=Age,label3=Birthplace,label4=`Birth Year`,label5=`Death Year`))+
+  geom_point()+geom_line(aes(group=pair))+
+  theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust = 1),
+        axis.title.y=element_blank())+
+  scale_x_continuous(breaks=seq(1500,1940,by=10))
+
+mgbd <- ggplotly(mgbd,session="knitr",tooltip = c("Name","Year","Birth Year","Death Year","Birthplace"),
+                 width=1000,height=1800) %>% 
+    layout(width="1000",height="1100",plot_bgcolor="#fcfcfc")
+
+htmltools::browsable(mgbd) 
+
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#| column: page-right
+
+mgbd <- womenL %>% 
+  ggplot(aes(x=Year,y=pair,color=Generation,label=Name,label2=Age,label3=Birthplace,label4=`Birth Year`,label5=`Death Year`))+
+  geom_point()+geom_line(aes(group=pair))+
+  theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust = 1),
+        axis.title.y=element_blank())+
+  scale_x_continuous(breaks=seq(1500,1940,by=10))
+
+mgbd <- ggplotly(mgbd,session="knitr",tooltip = c("Name","Year","Birth Year","Death Year","Birthplace"),
+                 width=1000,height=1800) %>% 
+    layout(width="1000",height="1100",plot_bgcolor="#fcfcfc")
+
+htmltools::browsable(mgbd) 
+
+
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#| column: page-right
+library(showtext)
+library(rcartocolor)
+
+tp <- ggplot(men,aes(label2=Age,label3=Birthplace,label4=Birth_Year,label5=Death_Year)) +
+  geom_rect(data = men,
+            mapping = aes(xmin = xmin, ymin = ymin, 
+                          xmax = xmax, ymax = ymax, 
+                          fill = Generation, colour = Generation,
+                          label=Name),
+            alpha = 0.5) + 
+  geom_text(data = men,
+            mapping = aes(x = x, y = y, label = Name),
+            color = "#585c45",size=.8) +theme_bw() + ylab("Generation") + scale_y_discrete(breaks=c(seq(1:12)))
+
+
+tpp <- ggplotly(tp,session="knitr",tooltip = c("Name","Year","Birth_Year","Death_Year","Birthplace","Age"), 
+                width=1000,height=1800) %>% 
+    layout(width="1000",height="1100",plot_bgcolor="#fcfcfc")
+
+htmltools::browsable(tpp) 
+
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#

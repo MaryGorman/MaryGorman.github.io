@@ -35,7 +35,8 @@ library(simplevis)
 
 ```{r}
 #| column: page-right
- fn <- list.files(pattern="*.xlsx|*.csv")
+# fn <- list.files(pattern="*.xlsx|*.csv")
+fn <- list.files(pattern="*.xlsx")
  sheets <- excel_sheets(fn)
 # tibble <- lapply(sheets, function(x) readxl::read_excel(fn, sheet = x))
 # data_frame <- lapply(tibble, as.data.frame)
@@ -110,9 +111,44 @@ joinC %>% select(Name,Birth_Year,Death_Year,Age,Birthplace,Death_Location,Group)
 
 
 
+## Birth Places
+
+*click and drag to move map; click markers to view info*
+
+::: {.column-page-inset-right}
+
+![](birthplaces_map.html){width="900" height="800"}
+
+:::
+
+
+
+
+
+
+
+
+## Age over time
+
+*hover for info*
+
+::: {.column-page-inset-right}
+
+![](age_at_death.html){width="900" height="800"}
+
+:::
+
+
+
+
+
+
 
 ```{r}
-#| column: page
+#| label: fig-age-time2
+#| fig.cap: Age Over Time - Alternate (hover for info)
+#| eval: false
+#| include: false
 gpp <- joinC %>% ggplot(aes(fill=Group,label1=Name,label3=Birthplace,label5=Death_Year))+
   stat_summary(aes(x=Birth_Year,y = Age), fun = "identity", geom = "bar",alpha=.5)+ 
   theme(axis.text.x = element_text(angle = -45, vjust = 0.5, hjust = 1),
@@ -122,10 +158,11 @@ gpp <- joinC %>% ggplot(aes(fill=Group,label1=Name,label3=Birthplace,label5=Deat
 
 ggplotly(gpp,tooltip = c("Name","Year","Birth_Year","Death_Year","Birthplace","Age"),
          width=1000,height=1800) %>% 
-   plotly_camera() %>% layout(width="1000",height="1000",plot_bgcolor="#fcfcfc")
+    layout(width="700",height="600",plot_bgcolor="#fcfcfc")
    
-```
 
+
+```
 
 ```{r fig.width=12, fig.height=10}
 #| include: false
@@ -187,7 +224,7 @@ mgbd <- menL %>% filter(!(Age=="Unknown")) %>%
 
 mgbd <- ggplotly(mgbd,session="knitr",tooltip = c("Name","Year","Birth Year","Death Year","Birthplace"),
                  width=1000,height=1800) %>% 
-   plotly_camera() %>% layout(width="1000",height="1100",plot_bgcolor="#fcfcfc")
+    layout(width="1000",height="1100",plot_bgcolor="#fcfcfc")
 
 htmltools::browsable(mgbd) 
 
@@ -212,7 +249,7 @@ mgbd <- womenL %>%
 
 mgbd <- ggplotly(mgbd,session="knitr",tooltip = c("Name","Year","Birth Year","Death Year","Birthplace"),
                  width=1000,height=1800) %>% 
-   plotly_camera() %>% layout(width="1000",height="1100",plot_bgcolor="#fcfcfc")
+    layout(width="1000",height="1100",plot_bgcolor="#fcfcfc")
 
 htmltools::browsable(mgbd) 
 
@@ -240,12 +277,12 @@ tp <- ggplot(men,aes(label2=Age,label3=Birthplace,label4=Birth_Year,label5=Death
             alpha = 0.5) + 
   geom_text(data = men,
             mapping = aes(x = x, y = y, label = Name),
-            color = "#585c45",size=.8) +theme_bw()
+            color = "#585c45",size=2) +theme_bw() + ylab("Generation") + scale_y_discrete(breaks=c(seq(1:12)))
 
 
 tpp <- ggplotly(tp,session="knitr",tooltip = c("Name","Year","Birth_Year","Death_Year","Birthplace","Age"), 
                 width=1000,height=1800) %>% 
-   plotly_camera() %>% layout(width="1000",height="1100",plot_bgcolor="#fcfcfc")
+    layout(width="1000",height="1100",plot_bgcolor="#fcfcfc")
 
 htmltools::browsable(tpp) 
 
